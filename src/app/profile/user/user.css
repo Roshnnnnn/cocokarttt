@@ -1,0 +1,23 @@
+/* Ensure all input fields have black text */
+input[type="text"],
+input[type="tel"],
+input[type="email"] {
+  color: black !important;
+}
+
+/* Remove any default browser styling that might affect text color */
+input:not([type="checkbox"]):not([type="radio"]) {
+  -webkit-text-fill-color: black !important;
+}
+
+/* Ensure placeholders are visible but don't override the text color */
+input::placeholder {
+  color: #9ca3af !important; /* gray-400 */
+  opacity: 1;
+}
+
+/* For disabled inputs */
+input:disabled {
+  color: black !important;
+  opacity: 0.7;
+}

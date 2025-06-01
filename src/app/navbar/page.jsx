@@ -1,9 +1,58 @@
 "use client"
 
 import React, { useState, useEffect } from 'react'
-// import Image from 'next/image'
 import Link from 'next/link'
 import { FaCartPlus, FaUser, FaSearch, FaTimes, FaHome, FaBox, FaPhoneAlt, FaInfoCircle, FaChartBar } from 'react-icons/fa'
+
+// Navigation Link Component with active state
+const NavLink = ({ href, children }) => {
+  const [isActive, setIsActive] = useState(false)
+
+  useEffect(() => {
+    setIsActive(window.location.pathname === href)
+  }, [href])
+
+  return (
+    <Link 
+      href={href}
+      className={`text-sm sm:text-base font-medium px-3 py-2 rounded-md transition-colors relative group ${
+        isActive 
+          ? 'text-orange-500 font-semibold' 
+          : 'text-gray-700 hover:text-orange-500'
+      }`}
+    >
+      {children}
+      <span 
+        className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-orange-500 transition-all duration-300 ${
+          isActive ? 'w-4/5' : 'w-0 group-hover:w-4/5'
+        }`}
+      />
+    </Link>
+  )
+}
+
+// Mobile Navigation Link Component
+const MobileNavLink = ({ href, children, onClick }) => {
+  const [isActive, setIsActive] = useState(false)
+
+  useEffect(() => {
+    setIsActive(window.location.pathname === href)
+  }, [href])
+
+  return (
+    <Link 
+      href={href}
+      onClick={onClick}
+      className={`block px-4 py-3 transition-colors rounded-md ${
+        isActive 
+          ? 'text-orange-500 font-semibold bg-orange-50' 
+          : 'text-gray-700 hover:bg-gray-100 hover:text-orange-500'
+      }`}
+    >
+      {children}
+    </Link>
+  )
+}
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -148,41 +197,6 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
-  )
-}
-
-// Navigation Link Components
-const NavLink = ({ href, children }) => {
-  const [isActive, setIsActive] = useState(false)
-
-  useEffect(() => {
-    setIsActive(window.location.pathname === href)
-  }, [])
-
-  return (
-    <a 
-      href={href} 
-      className='text-gray-700 font-medium hover:text-orange-500 transition-colors relative group'
-    >
-      {children}
-      <span 
-        className={`absolute bottom-0 left-0 h-0.5 bg-orange-500 transition-all duration-300 ${
-          isActive ? 'w-full' : 'w-0 group-hover:w-full'
-        }`}
-      />
-    </a>
-  )
-}
-
-const MobileNavLink = ({ href, children, onClick }) => {
-  return (
-    <a 
-      href={href} 
-      onClick={onClick}
-      className='text-gray-700 font-medium py-2 border-b border-gray-100 hover:text-orange-500 transition-colors block w-full'
-    >
-      {children}
-    </a>
   )
 }
 

@@ -8,6 +8,8 @@ import Link from 'next/link';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { auth, googleProvider } from '@/firebase/config';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { db } from '@/firebase/config';
 import LoadingSpinner from '@/components/LoadingSpinner';
 
 const Login = () => {
@@ -44,10 +46,44 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await signInWithEmailAndPassword(auth, email.trim(), password);
+      const userCredential = await signInWithEmailAndPassword(auth, email.trim(), password);
+      const user = userCredential.user;
+      
+      // Get additional user data from Firestore
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      const userData = userDoc.data();
+      
+      // Store user data in localStorage
+      localStorage.setItem('user', JSON.stringify({
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName || userData?.displayName || email.split('@')[0],
+        phoneNumber: user.phoneNumber || userData?.phoneNumber || '',
+        photoURL: user.photoURL || userData?.photoURL || '',
+        emailVerified: user.emailVerified,
+        accessToken: user.accessToken,
+        refreshToken: user.refreshToken,
+        lastLoginAt: user.metadata.lastSignInTime
+      }));
+      
+      // Also store the ID token
+      const idToken = await user.getIdToken();
+      localStorage.setItem('token', idToken);
+      
+      // Update last login time in Firestore
+      if (userDoc.exists()) {
+        await updateDoc(doc(db, 'users', user.uid), {
+          lastLoginAt: new Date().toISOString()
+        });
+      }
+      
       router.push('/');
     } catch (err) {
       console.error('Login error:', err);
+      // Clear any partial auth data on error
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+      
       if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
         setError('Invalid email or password');
       } else if (err.code === 'auth/too-many-requests') {
@@ -62,10 +98,62 @@ const Login = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      
+      // Check if user exists in Firestore
+      const userRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userRef);
+      
+      if (!userDoc.exists()) {
+        // Create user document if it doesn't exist
+        await setDoc(userRef, {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName || user.email.split('@')[0],
+          photoURL: user.photoURL || '',
+          emailVerified: user.emailVerified,
+          createdAt: new Date().toISOString(),
+          lastLoginAt: new Date().toISOString(),
+          role: 'user',
+          isGoogleSignIn: true
+        });
+      } else {
+        // Update last login time
+        await updateDoc(userRef, {
+          lastLoginAt: new Date().toISOString()
+        });
+      }
+      
+      // Get the latest user data
+      const updatedUserDoc = await getDoc(userRef);
+      const userData = updatedUserDoc.data();
+      
+      // Store user data in localStorage
+      localStorage.setItem('user', JSON.stringify({
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName || userData?.displayName || user.email.split('@')[0],
+        phoneNumber: user.phoneNumber || userData?.phoneNumber || '',
+        photoURL: user.photoURL || userData?.photoURL || '',
+        emailVerified: user.emailVerified,
+        accessToken: user.accessToken,
+        refreshToken: user.refreshToken,
+        lastLoginAt: user.metadata.lastSignInTime,
+        isGoogleSignIn: true
+      }));
+      
+      // Also store the ID token
+      const idToken = await user.getIdToken();
+      localStorage.setItem('token', idToken);
+      
       router.push('/');
     } catch (err) {
-      setError('Google sign-in failed');
+      console.error('Google sign-in error:', err);
+      // Clear any partial auth data on error
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+      setError('Google sign-in failed. Please try again.');
     }
   };
 
@@ -139,7 +227,7 @@ const Login = () => {
             <div className="text-sm">
               <Link 
                 href="/reset-password"
-                className="font-medium text-orange-600 hover:text-orange-500"
+                className="font-medium text-orange-600 hover:text-orange-500 transition-colors duration-200"
               >
                 Forgot your password?
               </Link>
@@ -178,10 +266,37 @@ const Login = () => {
                 setLoading(true);
                 
                 try {
-                  await signInWithEmailAndPassword(auth, 'roshan@gmail.com', '1234567890');
+                  const userCredential = await signInWithEmailAndPassword(auth, 'roshan@gmail.com', '1234567890');
+                  const user = userCredential.user;
+                  
+                  // Get guest user data from Firestore if exists
+                  const userDoc = await getDoc(doc(db, 'users', user.uid));
+                  const userData = userDoc.data();
+                  
+                  // Store guest user data in localStorage
+                  localStorage.setItem('user', JSON.stringify({
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: userData?.displayName || 'Guest User',
+                    phoneNumber: userData?.phoneNumber || '',
+                    photoURL: userData?.photoURL || '',
+                    emailVerified: user.emailVerified,
+                    accessToken: user.accessToken,
+                    refreshToken: user.refreshToken,
+                    lastLoginAt: user.metadata.lastSignInTime,
+                    isGuest: true
+                  }));
+                  
+                  // Also store the ID token
+                  const idToken = await user.getIdToken();
+                  localStorage.setItem('token', idToken);
+                  
                   router.push('/');
                 } catch (err) {
                   console.error('Guest login error:', err);
+                  // Clear any partial auth data on error
+                  localStorage.removeItem('user');
+                  localStorage.removeItem('token');
                   setError('Guest login failed. Please try again.');
                 } finally {
                   setLoading(false);
