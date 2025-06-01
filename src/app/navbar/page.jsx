@@ -33,7 +33,9 @@ const Navbar = () => {
         {/* Logo */}
         <div className='flex items-center'>
           {/* <Image src="/logo.png" alt="Logo" width={80} height={80} className="mr-2" /> */}
-          <span className='text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent cursor-pointer'>CocoKart</span>
+          <NavLink href="/">
+            <span className='text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent cursor-pointer'>CocoKart</span>
+          </NavLink>
         </div>
         
         {/* Search Bar */}

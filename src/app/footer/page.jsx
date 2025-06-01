@@ -29,12 +29,12 @@ const Footer = () => {
           <div>
             <h4 className='text-lg font-semibold mb-4 border-b border-gray-700 pb-2'>Quick Links</h4>
             <ul className='space-y-2'>
-              <FooterLink href="#">Home</FooterLink>
-              <FooterLink href="#">Products</FooterLink>
+              <FooterLink href="/">Home</FooterLink>
+              <FooterLink href="/products">Products</FooterLink>
               <FooterLink href="#">Special Offers</FooterLink>
               <FooterLink href="#">New Arrivals</FooterLink>
-              <FooterLink href="#">About Us</FooterLink>
-              <FooterLink href="#">Contact Us</FooterLink>
+              <FooterLink href="/about">About Us</FooterLink>
+              <FooterLink href="/contact">Contact Us</FooterLink>
             </ul>
           </div>
           
