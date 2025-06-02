@@ -14,12 +14,18 @@ const Profile = () => {
     // Get user data from localStorage
     const userData = localStorage.getItem('user');
     if (userData) {
-      setUser(JSON.parse(userData));
+      const user = JSON.parse(userData);
+      setUser(user);
+      // Check if user is admin
+      setIsAdmin(user.email === 'roshan@gmail.com');
     } else {
       // Redirect to login if not authenticated
       router.push('/login');
     }
   }, [router]);
+
+  // Check if user is admin
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const orders = [
     { 
@@ -117,14 +123,19 @@ const Profile = () => {
           <div className="divide-y divide-gray-100">
             {renderProfileOption('Personal Information', FaUser, 'blue', '/profile/user')}
             {renderProfileOption('My Orders', FaStore, 'green', '/profile/orders')}
-            {renderProfileOption('Dashboard', FaTachometerAlt, 'red', '/dashboard')}
+            {isAdmin && renderProfileOption('Dashboard', FaTachometerAlt, 'red', '/dashboard')}
             {renderProfileOption('Order History', FaHistory, 'purple', '/profile/history')}
             {renderProfileOption('Help & Support', FaQuestionCircle, 'red', '/help')}
             {renderProfileOption('Privacy Policy', FaShieldAlt, 'orange', '/privacy')}
           </div>
           
+          {/* Mobile App Version */}
+          <div className="px-6 py-4 text-center text-gray-400 text-sm">
+            App Version 1.0.0
+          </div>
+          
           {/* Mobile Logout Button */}
-          <div className="px-6 py-4">
+          <div className="border-t border-gray-100">
             <button 
               onClick={handleLogout}
               className="w-full py-3 px-4 border border-red-500 text-red-500 font-medium rounded-lg flex items-center justify-center gap-2 hover:bg-red-50 transition-colors"
@@ -133,16 +144,11 @@ const Profile = () => {
               <span>Logout</span>
             </button>
           </div>
-          
-          {/* Mobile App Version */}
-          <div className="px-6 py-4 text-center text-gray-400 text-sm">
-            App Version 1.0.0
-          </div>
         </div>
       </div>
 
       {/* Desktop View (md breakpoint and up) */}
-      <div className="hidden md:flex min-h-screen">
+      <div className="hidden md:flex min-h-screen pt-24">
         {/* Sidebar */}
         <div className="w-64 bg-white border-r border-gray-200 flex-shrink-0">
           <div className="p-6 border-b border-gray-200">
@@ -152,6 +158,7 @@ const Profile = () => {
           <nav className="p-4 space-y-1">
             {renderDesktopNavItem('My Profile', FaUser, '/profile/user', currentPath)}
             {renderDesktopNavItem('My Orders', FaShoppingBag, '/profile/orders', currentPath)}
+            {isAdmin && renderDesktopNavItem('Dashboard', FaTachometerAlt, '/dashboard', currentPath)}
             {renderDesktopNavItem('My Wishlist', FaHeart, '/profile/wishlist', currentPath)}
             {renderDesktopNavItem('My Addresses', FaMapMarkerAlt, '/profile/addresses', currentPath)}
             {renderDesktopNavItem('My Payments', FaCreditCard, '/profile/payments', currentPath)}

@@ -1,12 +1,13 @@
-
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { collection, getDocs } from '@firebase/firestore'
+import { collection, getDocs, addDoc, updateDoc, doc, serverTimestamp, onSnapshot } from '@firebase/firestore'
 import { db } from '../../../src/firebase/config'
 import Image from 'next/image'
-import { FiFilter,FiX,FiShoppingCart } from 'react-icons/fi'
-
+import { FiFilter, FiX, FiShoppingCart } from 'react-icons/fi'
+import { getAuth } from 'firebase/auth'
+import { useRouter } from 'next/navigation'
+import { Toaster, toast } from 'sonner'
 
 const StarRating = ({ rating }) => {
   const stars = Array.from({ length: 5 }, (_, index) => (
@@ -17,7 +18,7 @@ const StarRating = ({ rating }) => {
   return <div className="flex items-center">{stars}</div>;
 };
 
-const ProductCard = ({ product }) => (
+const ProductCard = ({ product, view = 'grid', onAddToCart }) => (
   <div className="bg-white rounded-lg border hover:shadow-lg transition-all duration-300 h-full">
     {/* Mobile layout (horizontal card) */}
     <div className="sm:hidden flex">
@@ -55,10 +56,11 @@ const ProductCard = ({ product }) => (
           </div>
 
           <button 
-            onClick={() => alert('Added to cart!')}
+            onClick={() => onAddToCart(product)}
             className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 active:bg-orange-700 transition-all duration-300 flex items-center justify-center text-xs font-medium shadow-md transform hover:scale-[1.02] active:scale-[0.98]"
           >
-            <span>Add</span>
+            <FiShoppingCart className="w-4 h-4 mr-1" />
+            <span>Add to Cart</span>
           </button>
         </div>
       </div>
@@ -100,9 +102,10 @@ const ProductCard = ({ product }) => (
           </div>
 
           <button 
-            onClick={() => alert('Added to cart!')}
+            onClick={() => onAddToCart(product)}
             className="w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600 active:bg-orange-700 transition-all duration-300 flex items-center justify-center text-sm font-medium shadow-md transform hover:scale-[1.02] active:scale-[0.98]"
           >
+            <FiShoppingCart className="w-4 h-4 mr-1" />
             <span>Add to Cart</span>
           </button>
         </div>
@@ -112,6 +115,95 @@ const ProductCard = ({ product }) => (
 )
 
 const Products = () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const router = useRouter();
+  const [cartItems, setCartItems] = useState([]);
+
+  // Listen to cart changes
+  useEffect(() => {
+    if (!user) return;
+
+    const cartRef = collection(db, 'users', user.uid, 'cart');
+    const unsubscribe = onSnapshot(cartRef, (snapshot) => {
+      const items = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setCartItems(items);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
+  const handleAddToCart = async (product) => {
+    console.log('Adding to cart:', product);
+    
+    if (!user) {
+      console.log('User not logged in');
+      toast.error('Please login to add items to cart', {
+        description: 'Redirecting to login page...'
+      });
+      router.push('/login');
+      return;
+    }
+
+    try {
+      console.log('Current user:', user.uid);
+      // Get user's cart reference
+      const cartRef = collection(db, 'users', user.uid, 'cart');
+      console.log('Cart reference:', cartRef);
+      
+      // Check if item already exists in cart
+      const cartSnapshot = await getDocs(cartRef);
+      console.log('Cart snapshot:', cartSnapshot.docs.map(doc => doc.data()));
+      
+      const existingItem = cartSnapshot.docs.find(doc => doc.data().productId === product.id);
+      console.log('Existing item:', existingItem?.data());
+
+      if (existingItem) {
+        // If item exists, update quantity
+        const newQuantity = existingItem.data().quantity + 1;
+        console.log('Updating quantity to:', newQuantity);
+        
+        await updateDoc(existingItem.ref, {
+          quantity: newQuantity
+        });
+        console.log('Successfully updated quantity');
+      } else {
+        // If item doesn't exist, add new item
+        const newItem = {
+          productId: product.id,
+          name: product.name,
+          price: product.price,
+          quantity: 1,
+          description: product.description,
+          brand: product.brand,
+          rating: product.rating,
+          image: product.images?.image,
+          createdAt: serverTimestamp()
+        };
+        console.log('Adding new item:', newItem);
+        
+        const docRef = await addDoc(cartRef, newItem);
+        console.log('Successfully added new item with ID:', docRef.id);
+      }
+
+      toast.success('Added to cart!', {
+        description: `${product.name} has been added to your cart`
+      });
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      console.error('Error details:', {
+        code: error.code,
+        message: error.message,
+        stack: error.stack
+      });
+      toast.error('Failed to add item', {
+        description: 'Please try again later'
+      });
+    }
+  };
   const [products, setProducts] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
   const [filters, setFilters] = useState({
@@ -195,6 +287,7 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Toaster richColors position="top-center" expand={true} />
       <div className="max-w-7xl mx-auto px-4 pt-24 pb-8">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Our Products</h1>
 
@@ -356,7 +449,12 @@ const Products = () => {
           <div className="flex-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 auto-rows-fr">
               {filteredProducts.map(product => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard 
+                  key={product.id} 
+                  product={product} 
+                  view={filters.view}
+                  onAddToCart={handleAddToCart}
+                />
               ))}
             </div>
             {filteredProducts.length === 0 && (

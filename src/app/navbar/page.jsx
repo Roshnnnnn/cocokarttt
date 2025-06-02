@@ -1,6 +1,9 @@
 "use client"
 
 import React, { useState, useEffect } from 'react'
+import { getAuth } from "firebase/auth";
+import { collection, query, onSnapshot } from "firebase/firestore";
+import { db } from "../../firebase/config";
 import Link from 'next/link'
 import { FaCartPlus, FaUser, FaSearch, FaTimes, FaHome, FaBox, FaPhoneAlt, FaInfoCircle } from 'react-icons/fa'
 
@@ -51,6 +54,30 @@ const MobileNavLink = ({ href, children, onClick }) => {
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [cartCount, setCartCount] = useState(0)
+
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!user) {
+      setCartCount(0);
+      return;
+    }
+
+    const cartRef = collection(db, 'users', user.uid, 'cart');
+    const unsubscribe = onSnapshot(cartRef, (snapshot) => {
+      let total = 0;
+      snapshot.docs.forEach(doc => {
+        total += doc.data().quantity || 0;
+      });
+      setCartCount(total);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen)
@@ -72,6 +99,8 @@ const Navbar = () => {
         className={`fixed inset-0 bg-black/50 transition-opacity duration-300 md:hidden ${mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={toggleMobileMenu}
       />
+      
+     
       
       <div className='max-w-7xl mx-auto flex justify-between items-center relative px-4 sm:px-6 py-3 sm:py-4'>
         {/* Logo */}
@@ -104,11 +133,13 @@ const Navbar = () => {
         {/* Icons */}
         <div className='flex items-center gap-2 sm:gap-4'>
           <div className='hidden md:flex items-center gap-2'>
-            <Link href="/cart">
-              <button className='relative p-2 hover:bg-gray-100 rounded-full transition-colors'>
-                <FaCartPlus className='text-base sm:text-lg md:text-xl text-black cursor-pointer' />
-                <span className='absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center'>0</span>
-              </button>
+            <Link href="/cart" className="hover:text-orange-500 relative">
+              <FaCartPlus className="text-base sm:text-lg md:text-xl text-black cursor-pointer" />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
             </Link>
             <Link href="/profile">
               <button className='p-2 hover:bg-gray-100 rounded-full transition-colors'>
@@ -132,6 +163,12 @@ const Navbar = () => {
             )}
           </button>
         </div>
+      </div>
+       {/* Marquee for Desktop */}
+       <div className="hidden md:block bg-orange-50 text-orange-900 text-sm px-4 py-1 mb-4">
+        <marquee behavior="scroll" direction="left" scrollamount="3">
+          🎉 25% OFF on all products this weekend! Use code COCO25 at checkout. | Free shipping on orders above ₹999 | 24/7 Customer Support Available
+        </marquee>
       </div>
 
       {/* Mobile Menu */}
