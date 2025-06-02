@@ -103,22 +103,24 @@ const Navbar = () => {
           <NavLink href="/products">Products</NavLink>
           <NavLink href="/contact">Contact</NavLink>
           <NavLink href="/about">About</NavLink>
-          <NavLink href="/dashboard">Dashboard</NavLink>
+          {/* <NavLink href="/dashboard">Dashboard</NavLink> */}
         </div>
         
         {/* Icons */}
         <div className='flex items-center gap-2 sm:gap-4'>
-          <NavLink href="/cart">
-            <button className='hidden md:block relative p-2 hover:bg-gray-100 rounded-full transition-colors'>
-              <FaCartPlus className='text-base sm:text-lg md:text-xl text-black cursor-pointer' />
-              <span className='absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center'>0</span>
-            </button>
-          </NavLink>
-          <NavLink href="/profile">
-            <button className='hidden md:block p-2 hover:bg-gray-100 rounded-full transition-colors'>
-              <FaUser className='text-base sm:text-lg md:text-xl text-black cursor-pointer' />
-            </button>
-          </NavLink>
+          <div className='hidden md:flex items-center gap-2'>
+            <Link href="/cart">
+              <button className='relative p-2 hover:bg-gray-100 rounded-full transition-colors'>
+                <FaCartPlus className='text-base sm:text-lg md:text-xl text-black cursor-pointer' />
+                <span className='absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center'>0</span>
+              </button>
+            </Link>
+            <Link href="/profile">
+              <button className='p-2 hover:bg-gray-100 rounded-full transition-colors'>
+                <FaUser className='text-base sm:text-lg md:text-xl text-black cursor-pointer' />
+              </button>
+            </Link>
+          </div>
           <button 
             className='md:hidden p-2 hover:bg-gray-100 rounded-full transition-colors'
             onClick={toggleMobileMenu}
@@ -171,12 +173,12 @@ const Navbar = () => {
                   <span>About</span>
                 </div>
               </MobileNavLink>
-              <MobileNavLink href="/dashboard" onClick={toggleMobileMenu}>
+              {/* <MobileNavLink href="/dashboard" onClick={toggleMobileMenu}>
                 <div className="flex items-center gap-3">
                   <FaChartBar className="text-orange-500" />
                   <span>Dashboard</span>
                 </div>
-              </MobileNavLink>
+              </MobileNavLink> */}
               <MobileNavLink href="/cart" onClick={toggleMobileMenu}>
                 <div className="flex items-center gap-3">
                   <FaCartPlus className="text-orange-500" />

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { FaUser, FaMapMarkerAlt, FaCreditCard, FaSignOutAlt, FaChevronRight, FaShoppingBag, FaHeart, FaEdit, FaPhone, FaEnvelope, FaCamera, FaChevronLeft, FaQuestionCircle, FaShieldAlt, FaStore, FaHistory, FaGift, FaHome, FaSearch, FaShoppingCart, FaUser as FaUserIcon } from 'react-icons/fa';
+import { FaUser, FaMapMarkerAlt, FaCreditCard, FaSignOutAlt, FaChevronRight, FaShoppingBag, FaHeart, FaEdit, FaPhone, FaEnvelope, FaCamera, FaChevronLeft, FaQuestionCircle, FaShieldAlt, FaStore, FaHistory, FaGift, FaHome, FaSearch, FaShoppingCart, FaUser as FaUserIcon, FaTachometerAlt } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -117,7 +117,7 @@ const Profile = () => {
           <div className="divide-y divide-gray-100">
             {renderProfileOption('Personal Information', FaUser, 'blue', '/profile/user')}
             {renderProfileOption('My Orders', FaStore, 'green', '/profile/orders')}
-            {renderProfileOption('My Rewards', FaGift, 'yellow', '/profile/rewards')}
+            {renderProfileOption('Dashboard', FaTachometerAlt, 'red', '/dashboard')}
             {renderProfileOption('Order History', FaHistory, 'purple', '/profile/history')}
             {renderProfileOption('Help & Support', FaQuestionCircle, 'red', '/help')}
             {renderProfileOption('Privacy Policy', FaShieldAlt, 'orange', '/privacy')}
