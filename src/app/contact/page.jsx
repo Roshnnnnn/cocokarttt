@@ -75,51 +75,55 @@ const Contact = () => {
                 <form onSubmit={handleSubmit} className='space-y-6'>
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
                   <div>
-                    <label htmlFor='name' className='block text-xs sm:text-sm font-medium text-gray-700'>Full Name</label>
+                    <label htmlFor='name' className='block text-sm sm:text-base font-medium text-gray-700 mb-2'>Full Name</label>
                     <input
                       type='text'
                       id='name'
                       name='name'
                       value={formData.name}
                       onChange={handleChange}
-                      className='text-black mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm transition duration-150 ease-in-out'
+                      className='text-black block w-full py-3 px-4 rounded-lg bg-gray-50 border-0  text-base '
+                      placeholder='Your name'
                       required
                     />
                   </div>
                   <div>
-                    <label htmlFor='email' className='block text-xs sm:text-sm font-medium text-gray-700'>Email Address</label>
+                    <label htmlFor='email' className='block text-sm sm:text-base font-medium text-gray-700 mb-2'>Email Address</label>
                     <input
                       type='email'
                       id='email'
                       name='email'
                       value={formData.email}
                       onChange={handleChange}
-                      className='text-black mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm transition duration-150 ease-in-out'
+                      className='text-black block w-full py-3 px-4 rounded-lg bg-gray-50 border-0 focus:ring-0 text-base transition duration-150 ease-in-out placeholder-gray-400'
+                      placeholder='your.email@example.com'
                       required
                     />
                   </div>
                 </div>
                 <div>
-                  <label htmlFor='subject' className='block text-xs sm:text-sm font-medium text-gray-700'>Subject</label>
+                  <label htmlFor='subject' className='block text-sm sm:text-base font-medium text-gray-700 mb-2'>Subject</label>
                   <input
                     type='text'
                     id='subject'
                     name='subject'
                     value={formData.subject}
                     onChange={handleChange}
-                    className='text-black mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm transition duration-150 ease-in-out'
+                    className='text-black block w-full py-3 px-4 rounded-lg bg-gray-50 border-0 focus:ring-0 text-base transition duration-150 ease-in-out placeholder-gray-400'
+                    placeholder='What is this regarding?'
                     required
                   />
                 </div>
                 <div>
-                  <label htmlFor='message' className='block text-xs sm:text-sm font-medium text-gray-700'>Message</label>
+                  <label htmlFor='message' className='block text-sm sm:text-base font-medium text-gray-700 mb-2'>Message</label>
                   <textarea
                     id='message'
                     name='message'
                     rows={6}
                     value={formData.message}
                     onChange={handleChange}
-                    className='text-black mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm transition duration-150 ease-in-out'
+                    className='text-black block w-full py-3 px-4 rounded-lg bg-gray-50 border-0 focus:ring-0 text-base transition duration-150 ease-in-out placeholder-gray-400'
+                    placeholder='Your message here...'
                     required
                   />
                 </div>

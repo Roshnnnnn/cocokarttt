@@ -179,19 +179,15 @@ const Profile = () => {
                 {/* Profile Picture */}
                 <div className="relative">
                   <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden">
-                    {user.photoURL ? (
-                      <img 
-                        src={user.photoURL} 
-                        alt={user.displayName} 
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <FaUser className="text-5xl text-gray-400" />
-                    )}
+                    <img 
+                      src={`https://api.dicebear.com/7.x/bottts/svg?seed=${user.email || 'default'}&backgroundColor=ffaa00,ff8800,ff6600`}
+                      alt={user.displayName || 'User Avatar'} 
+                      className="w-full h-full object-contain p-2"
+                    />
                   </div>
-                  <button className="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-md border border-gray-200">
+                  {/* <button className="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-md border border-gray-200">
                     <FaCamera className="text-gray-600 text-sm" />
-                  </button>
+                  </button> */}
                 </div>
                 
                 {/* User Info */}
@@ -202,10 +198,10 @@ const Profile = () => {
                       <p className="text-gray-500 mt-1">{user.email || 'No email provided'}</p>
                       <p className="text-gray-500 text-sm">{user.phoneNumber || 'No phone number'}</p>
                     </div>
-                    <button className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-colors">
+                    {/* <button className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-colors">
                       <FaEdit className="text-xs" />
                       <span>Edit Profile</span>
-                    </button>
+                    </button> */}
                   </div>
                   
                   <div className="mt-6 grid grid-cols-2 gap-4">

@@ -5,10 +5,10 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 const Section = ({ title, children, isOpen, onToggle }) => {
   return (
-    <div className="border border-orange-200 dark:border-orange-900/30 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-orange-300 dark:hover:shadow-orange-900/20 animate-fade-in">
+    <div className="border border-gray-100 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg group bg-white animate-fade-in">
       <button
         onClick={onToggle}
-        className={`w-full px-6 py-4 flex items-center justify-between bg-white  ${isOpen ? 'bg-orange-50 dark:bg-orange-900/10' : 'hover:bg-orange-50 dark:hover:bg-orange-900/10'} transition-all duration-300`}
+        className={`w-full px-6 py-4 flex items-center justify-between bg-white ${isOpen ? 'bg-orange-50' : 'hover:bg-gray-50'} transition-all duration-300`}
       >
         <h2 className="text-lg md:text-xl font-semibold text-black font-montserrat">{title}</h2>
         {isOpen ? (
@@ -178,16 +178,18 @@ const TermsAndConditions = () => {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl pt-24">
-      <div className="bg-white  shadow-lg shadow-orange-100/50 dark:shadow-orange-950/20 rounded-lg p-6 md:p-8">
-        <h1 className="text-4xl md:text-5xl font-bold text-center font-montserrat mb-2 bg-gradient-to-r from-orange-600 via-orange-500 to-orange-400 bg-clip-text text-transparent">
-          Terms & Conditions
-        </h1>
-        <p className="text-black text-center mb-8 font-montserrat">
-          Please read these terms carefully before using our services
-        </p>
+    <div className="container mx-auto px-4 py-8 max-w-5xl pt-24">
+      <div className="bg-white shadow-xl rounded-2xl p-6 md:p-8 border border-gray-100">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold font-montserrat mb-4 bg-gradient-to-r from-orange-600 via-orange-500 to-orange-400 bg-clip-text text-transparent">
+            Terms & Conditions
+          </h1>
+          <p className="text-gray-600 text-lg font-montserrat max-w-2xl mx-auto">
+            Please read these terms carefully before using our services
+          </p>
+        </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 divide-y divide-gray-100">
           {sections.map((section, index) => (
             <Section 
               key={index} 
@@ -200,7 +202,7 @@ const TermsAndConditions = () => {
           ))}
         </div>
 
-        <p className="text-sm text-black text-center mt-8 font-montserrat">
+        <p className="text-sm text-gray-500 text-center mt-12 font-montserrat">
           Last updated: {new Date().toLocaleDateString()}
         </p>
       </div>

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FaCartPlus, FaUser, FaSearch, FaTimes, FaHome, FaBox, FaPhoneAlt, FaInfoCircle, FaChartBar } from 'react-icons/fa'
+import { FaCartPlus, FaUser, FaSearch, FaTimes, FaHome, FaBox, FaPhoneAlt, FaInfoCircle } from 'react-icons/fa'
 
 // Navigation Link Component with active state
 const NavLink = ({ href, children }) => {
@@ -15,18 +15,13 @@ const NavLink = ({ href, children }) => {
   return (
     <Link 
       href={href}
-      className={`text-sm sm:text-base font-medium px-3 py-2 rounded-md transition-colors relative group ${
+      className={`text-sm sm:text-base px-3 py-2 rounded-md transition-colors ${
         isActive 
-          ? 'text-orange-500 font-semibold' 
-          : 'text-gray-700 hover:text-orange-500'
+          ? 'text-orange-500' 
+          : 'text-gray-700'
       }`}
     >
       {children}
-      <span 
-        className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-orange-500 transition-all duration-300 ${
-          isActive ? 'w-4/5' : 'w-0 group-hover:w-4/5'
-        }`}
-      />
     </Link>
   )
 }
@@ -45,8 +40,8 @@ const MobileNavLink = ({ href, children, onClick }) => {
       onClick={onClick}
       className={`block px-4 py-3 transition-colors rounded-md ${
         isActive 
-          ? 'text-orange-500 font-semibold bg-orange-50' 
-          : 'text-gray-700 hover:bg-gray-100 hover:text-orange-500'
+          ? 'text-orange-500' 
+          : 'text-gray-700'
       }`}
     >
       {children}
@@ -64,7 +59,7 @@ const Navbar = () => {
   }
   
   return (
-    <nav className='fixed top-0 left-0 right-0 z-50 bg-white shadow-md'>
+    <nav className='fixed top-0 left-0 right-0 z-50 bg-white'>
       <div className='bg-gray-100 text-black'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6'>
           <div className='flex justify-end py-1'>
@@ -173,12 +168,6 @@ const Navbar = () => {
                   <span>About</span>
                 </div>
               </MobileNavLink>
-              {/* <MobileNavLink href="/dashboard" onClick={toggleMobileMenu}>
-                <div className="flex items-center gap-3">
-                  <FaChartBar className="text-orange-500" />
-                  <span>Dashboard</span>
-                </div>
-              </MobileNavLink> */}
               <MobileNavLink href="/cart" onClick={toggleMobileMenu}>
                 <div className="flex items-center gap-3">
                   <FaCartPlus className="text-orange-500" />

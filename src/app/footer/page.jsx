@@ -42,12 +42,12 @@ const Footer = () => {
           <div>
             <h4 className='text-lg font-semibold mb-4 border-b border-gray-700 pb-2'>Customer Service</h4>
             <ul className='space-y-2'>
-              <FooterLink href="#">My Account</FooterLink>
-              <FooterLink href="#">Order History</FooterLink>
-              <FooterLink href="#">Wishlist</FooterLink>
-              <FooterLink href="#">Returns & Refunds</FooterLink>
+              <FooterLink href="/profile">My Account</FooterLink>
+              <FooterLink href="/orderhistory">Order History</FooterLink>
+              <FooterLink href="/wishlist">Wishlist</FooterLink>
+              <FooterLink href="/returns&refunds">Returns & Refunds</FooterLink>
               <FooterLink href="/faq">FAQ</FooterLink>
-              <FooterLink href="#">Terms & Conditions</FooterLink>
+              <FooterLink href="/terms&conditions">Terms & Conditions</FooterLink>
             </ul>
           </div>
           
@@ -120,7 +120,7 @@ const Footer = () => {
         </div>
         
         {/* Copyright */}
-        <div className='text-center text-gray-500 text-sm pt-6 border-t border-gray-800'>
+        {/* <div className='text-center text-gray-500 text-sm pt-6 border-t border-gray-800'>
           <p className='mb-3'>&copy; {currentYear} CocoKart. All rights reserved.</p>
           <div className='flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-6'>
             <Link href="#" className='hover:text-gray-300 transition-colors'>Privacy Policy</Link>
@@ -129,7 +129,7 @@ const Footer = () => {
             <span className='hidden sm:inline text-gray-700'>•</span>
             <Link href="#" className='hover:text-gray-300 transition-colors'>Sitemap</Link>
           </div>
-        </div>
+        </div> */}
       </div>
     </footer>
   )

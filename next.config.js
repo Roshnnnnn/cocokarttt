@@ -1,29 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'images.pexels.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'firebasestorage.googleapis.com',
-      },
-      {
-        protocol: 'https',
-        hostname: '**.googleapis.com',
-      },
-      {
-        protocol: 'https',
-        hostname: '**.firebasestorage.app',
-      },
+    domains: [
+      'images.pexels.com',
+      'images.unsplash.com',
+      'firebasestorage.googleapis.com',
+      'm.media-amazon.com',
+      'www.howtocookthat.net',
+      'snaktime.in',
+      'cococart.in',
+      'www.ferrerorocher.com',
+      'images-na.ssl-images-amazon.com',
+      'www.bigbasket.com'
     ],
-    domains: ['firebasestorage.googleapis.com', '*.googleapis.com', '*.firebasestorage.app'],
   },
   async headers() {
     return [
