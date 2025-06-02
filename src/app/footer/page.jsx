@@ -31,7 +31,7 @@ const Footer = () => {
             <ul className='space-y-2'>
               <FooterLink href="/">Home</FooterLink>
               <FooterLink href="/products">Products</FooterLink>
-              <FooterLink href="#">Special Offers</FooterLink>
+              <FooterLink href="/terms&conditions">Terms & Conditions</FooterLink>
               <FooterLink href="#">New Arrivals</FooterLink>
               <FooterLink href="/about">About Us</FooterLink>
               <FooterLink href="/contact">Contact Us</FooterLink>
@@ -46,7 +46,7 @@ const Footer = () => {
               <FooterLink href="#">Order History</FooterLink>
               <FooterLink href="#">Wishlist</FooterLink>
               <FooterLink href="#">Returns & Refunds</FooterLink>
-              <FooterLink href="#">FAQ</FooterLink>
+              <FooterLink href="/faq">FAQ</FooterLink>
               <FooterLink href="#">Terms & Conditions</FooterLink>
             </ul>
           </div>
